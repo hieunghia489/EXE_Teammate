@@ -42,11 +42,9 @@ namespace Domain.Models
         {
             modelBuilder.Entity<Course>(entity =>
             {
-                entity.HasKey(e => e.CourseCode);
-
                 entity.ToTable("Course");
 
-                entity.HasIndex(e => e.CourseCode, "UQ__Course__FC00E00058ED99EA")
+                entity.HasIndex(e => e.CourseCode, "UQ__Course__FC00E0003CD227A0")
                     .IsUnique();
 
                 entity.Property(e => e.CourseCode).HasMaxLength(255);
@@ -57,19 +55,15 @@ namespace Domain.Models
 
                 entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
-                entity.Property(e => e.SemesterCode).HasMaxLength(255);
-
-                entity.Property(e => e.SubjectCode).HasMaxLength(255);
-
-                entity.HasOne(d => d.SemesterCodeNavigation)
+                entity.HasOne(d => d.Semester)
                     .WithMany(p => p.Courses)
-                    .HasForeignKey(d => d.SemesterCode)
+                    .HasForeignKey(d => d.SemesterId)
                     .HasConstraintName("FK__Course__Semester__4CA06362");
 
-                entity.HasOne(d => d.SubjectCodeNavigation)
+                entity.HasOne(d => d.Subject)
                     .WithMany(p => p.Courses)
-                    .HasForeignKey(d => d.SubjectCode)
-                    .HasConstraintName("FK__Course__SubjectC__4BAC3F29");
+                    .HasForeignKey(d => d.SubjectId)
+                    .HasConstraintName("FK__Course__SubjectI__4BAC3F29");
             });
 
             modelBuilder.Entity<Feedback>(entity =>
@@ -92,11 +86,9 @@ namespace Domain.Models
 
             modelBuilder.Entity<Grade>(entity =>
             {
-                entity.HasKey(e => e.GradeCode);
-
                 entity.ToTable("Grade");
 
-                entity.HasIndex(e => e.GradeCode, "UQ__Grade__B1E0A186869DFE80")
+                entity.HasIndex(e => e.GradeCode, "UQ__Grade__B1E0A18650CFF281")
                     .IsUnique();
 
                 entity.Property(e => e.GradeCode).HasMaxLength(255);
@@ -112,19 +104,17 @@ namespace Domain.Models
 
             modelBuilder.Entity<Major>(entity =>
             {
-                entity.HasKey(e => e.MajorCode);
-
                 entity.ToTable("Major");
 
-                entity.HasIndex(e => e.MajorName, "UQ__Major__5FF4A37BCB1E7480")
+                entity.HasIndex(e => e.MajorName, "UQ__Major__5FF4A37B2AAE9E09")
                     .IsUnique();
 
-                entity.HasIndex(e => e.MajorCode, "UQ__Major__64E58F94CE2A585A")
+                entity.HasIndex(e => e.MajorCode, "UQ__Major__64E58F94780BF6A2")
                     .IsUnique();
-
-                entity.Property(e => e.MajorCode).HasMaxLength(255);
 
                 entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
+
+                entity.Property(e => e.MajorCode).HasMaxLength(255);
 
                 entity.Property(e => e.MajorDescription).HasMaxLength(255);
 
@@ -133,16 +123,14 @@ namespace Domain.Models
 
             modelBuilder.Entity<Semester>(entity =>
             {
-                entity.HasKey(e => e.SemesterCode);
-
                 entity.ToTable("Semester");
 
-                entity.HasIndex(e => e.SemesterCode, "UQ__Semester__513151C96B67B063")
+                entity.HasIndex(e => e.SemesterCode, "UQ__Semester__513151C946139D5A")
                     .IsUnique();
 
-                entity.Property(e => e.SemesterCode).HasMaxLength(255);
-
                 entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
+
+                entity.Property(e => e.SemesterCode).HasMaxLength(255);
 
                 entity.Property(e => e.SemesterDescription).HasMaxLength(255);
 
@@ -155,36 +143,32 @@ namespace Domain.Models
             {
                 entity.ToTable("Student");
 
-                entity.HasIndex(e => e.StudentPhone, "UQ__Student__2EB4F8B3A4DA6906")
+                entity.HasIndex(e => e.StudentPhone, "UQ__Student__2EB4F8B32275A295")
                     .IsUnique();
 
-                entity.HasIndex(e => e.StudentId, "UQ__Student__32C52B98DF174DC2")
+                entity.HasIndex(e => e.StudentId, "UQ__Student__32C52B9895AE7B4D")
                     .IsUnique();
 
-                entity.HasIndex(e => e.StudentEmail, "UQ__Student__3569CFDBDEDE0479")
+                entity.HasIndex(e => e.StudentEmail, "UQ__Student__3569CFDB6C346AEB")
                     .IsUnique();
 
                 entity.Property(e => e.StudentId).HasMaxLength(255);
 
-                entity.Property(e => e.GradeCode).HasMaxLength(255);
-
                 entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
-
-                entity.Property(e => e.MajorCode).HasMaxLength(255);
 
                 entity.Property(e => e.StudentEmail).HasMaxLength(255);
 
                 entity.Property(e => e.StudentFullName).HasMaxLength(255);
 
-                entity.HasOne(d => d.GradeCodeNavigation)
+                entity.HasOne(d => d.Grade)
                     .WithMany(p => p.Students)
-                    .HasForeignKey(d => d.GradeCode)
-                    .HasConstraintName("FK__Student__GradeCo__4222D4EF");
+                    .HasForeignKey(d => d.GradeId)
+                    .HasConstraintName("FK__Student__GradeId__4222D4EF");
 
-                entity.HasOne(d => d.MajorCodeNavigation)
+                entity.HasOne(d => d.Major)
                     .WithMany(p => p.Students)
-                    .HasForeignKey(d => d.MajorCode)
-                    .HasConstraintName("FK__Student__MajorCo__412EB0B6");
+                    .HasForeignKey(d => d.MajorId)
+                    .HasConstraintName("FK__Student__MajorId__412EB0B6");
             });
 
             modelBuilder.Entity<StudentInCourse>(entity =>
@@ -205,6 +189,7 @@ namespace Domain.Models
 
                 entity.HasOne(d => d.CourseCodeNavigation)
                     .WithMany(p => p.StudentInCourses)
+                    .HasPrincipalKey(p => p.CourseCode)
                     .HasForeignKey(d => d.CourseCode)
                     .HasConstraintName("FK__StudentIn__Cours__5070F446");
 
@@ -216,16 +201,14 @@ namespace Domain.Models
 
             modelBuilder.Entity<Subject>(entity =>
             {
-                entity.HasKey(e => e.SubjectCode);
-
                 entity.ToTable("Subject");
 
-                entity.HasIndex(e => e.SubjectCode, "UQ__Subject__9F7CE1A926AD4DBD")
+                entity.HasIndex(e => e.SubjectCode, "UQ__Subject__9F7CE1A9624C934F")
                     .IsUnique();
 
-                entity.Property(e => e.SubjectCode).HasMaxLength(255);
-
                 entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
+
+                entity.Property(e => e.SubjectCode).HasMaxLength(255);
 
                 entity.Property(e => e.SubjectDescription).HasMaxLength(255);
             });
@@ -246,12 +229,10 @@ namespace Domain.Models
 
                 entity.Property(e => e.TaskStartDate).HasColumnType("datetime");
 
-                entity.Property(e => e.TeamName).HasMaxLength(255);
-
-                entity.HasOne(d => d.TeamNameNavigation)
+                entity.HasOne(d => d.Team)
                     .WithMany(p => p.Tasks)
-                    .HasForeignKey(d => d.TeamName)
-                    .HasConstraintName("FK__Task__TeamName__5CD6CB2B");
+                    .HasForeignKey(d => d.TeamId)
+                    .HasConstraintName("FK__Task__TeamId__5CD6CB2B");
             });
 
             modelBuilder.Entity<TaskParticipant>(entity =>
@@ -281,18 +262,16 @@ namespace Domain.Models
 
             modelBuilder.Entity<Team>(entity =>
             {
-                entity.HasKey(e => e.TeamName);
-
                 entity.ToTable("Team");
 
-                entity.HasIndex(e => e.TeamName, "UQ__Team__4E21CAAC98F99EEE")
+                entity.HasIndex(e => e.TeamName, "UQ__Team__4E21CAACBD4B7C54")
                     .IsUnique();
-
-                entity.Property(e => e.TeamName).HasMaxLength(255);
 
                 entity.Property(e => e.CreateDate).HasColumnType("date");
 
                 entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
+
+                entity.Property(e => e.TeamName).HasMaxLength(255);
             });
 
             modelBuilder.Entity<Teammate>(entity =>
@@ -303,14 +282,12 @@ namespace Domain.Models
 
                 entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
-                entity.Property(e => e.TeamName).HasMaxLength(255);
-
                 entity.Property(e => e.TeammateJoinDate).HasColumnType("date");
 
-                entity.HasOne(d => d.TeamNameNavigation)
+                entity.HasOne(d => d.Team)
                     .WithMany(p => p.Teammates)
-                    .HasForeignKey(d => d.TeamName)
-                    .HasConstraintName("FK__Teammate__TeamNa__571DF1D5");
+                    .HasForeignKey(d => d.TeamId)
+                    .HasConstraintName("FK__Teammate__TeamId__571DF1D5");
 
                 entity.HasOne(d => d.TeammateNavigation)
                     .WithOne(p => p.Teammate)

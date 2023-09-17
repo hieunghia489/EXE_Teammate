@@ -13,29 +13,31 @@ GO
 USE [TeammateEXE]
 
 CREATE TABLE [dbo].[Major](
+	[MajorId] [int] IDENTITY (1, 1),
 	[MajorCode] [nvarchar](255) NOT NULL UNIQUE,
 	[MajorName] [nvarchar](255) NOT NULL UNIQUE,
 	[MajorDescription] [nvarchar](255),
 	[isDeleted] [bit],
 
-	CONSTRAINT PK_Major PRIMARY KEY ([MajorCode])
+	CONSTRAINT PK_Major PRIMARY KEY ([MajorId])
 )
 
 
 CREATE TABLE [dbo].[Grade](
+	[GradeId] [int] IDENTITY (1, 1),
 	[GradeCode] [nvarchar](255) NOT NULL UNIQUE,
 	[GradeDescription] [nvarchar](255),
 	[GradeStartDate] [date],
 	[GradeEndDate] [date],
 	[isDeleted] [bit],
 
-	CONSTRAINT PK_Grade PRIMARY KEY ([GradeCode])
+	CONSTRAINT PK_Grade PRIMARY KEY ([GradeId])
 )
 
 CREATE TABLE [dbo].[Student](
 	[StudentId] [nvarchar](255) NOT NULL UNIQUE,
-	[MajorCode] [nvarchar](255) NOT NULL REFERENCES [Major](MajorCode) on delete cascade on update cascade,
-	[GradeCode] [nvarchar](255) NOT NULL REFERENCES [Grade](GradeCode) on delete cascade on update cascade,
+	[MajorId] [int] NOT NULL REFERENCES [Major](MajorId) on delete cascade on update cascade,
+	[GradeId] [int] NOT NULL REFERENCES [Grade](GradeId) on delete cascade on update cascade,
 	[StudentFullName] [nvarchar](255),
 	[StudentPhone] [int] NOT NULL UNIQUE,
 	[StudentEmail] [nvarchar](255) NOT NULL UNIQUE,
@@ -46,34 +48,37 @@ CREATE TABLE [dbo].[Student](
 )
 
 CREATE TABLE [dbo].[Subject](
+	[SubjectId] [int] IDENTITY (1, 1),
 	[SubjectCode] [nvarchar](255) UNIQUE,
 	[SubjectDescription] [nvarchar](255),
 	[isDeleted] [bit],
 
-	CONSTRAINT PK_Subject PRIMARY KEY ([SubjectCode])
+	CONSTRAINT PK_Subject PRIMARY KEY ([SubjectId])
 
 )
 
 CREATE TABLE [dbo].[Semester](
+	[SemesterId] [int] IDENTITY (1, 1),
 	[SemesterCode] [nvarchar](255) NOT NULL UNIQUE,
 	[SemesterStartDate] [date],
 	[SemesterEndDate] [date],
 	[SemesterDescription] [nvarchar](255),
 	[isDeleted] [bit],
 
-	CONSTRAINT PK_Semester PRIMARY KEY ([SemesterCode])
+	CONSTRAINT PK_Semester PRIMARY KEY ([SemesterId])
 
 )
 
 CREATE TABLE [dbo].[Course](
+	[CourseId] [int] IDENTITY (1, 1),
 	[CourseCode] [nvarchar](255) NOT NULL UNIQUE,
-	[SubjectCode] [nvarchar](255) NOT NULL REFERENCES [Subject](SubjectCode) on delete cascade on update cascade,
-	[SemesterCode] [nvarchar](255) NOT NULL REFERENCES [Semester](SemesterCode) on delete cascade on update cascade,
+	[SubjectId] [int] NOT NULL REFERENCES [Subject](SubjectId) on delete cascade on update cascade,
+	[SemesterId] [int] NOT NULL REFERENCES [Semester](SemesterId) on delete cascade on update cascade,
 	[CourseStartDate] [date],
 	[CourseEndDate] [date],
 	[isDeleted] [bit],
 
-	CONSTRAINT PK_Course PRIMARY KEY ([CourseCode])
+	CONSTRAINT PK_Course PRIMARY KEY ([CourseId])
 )
 
 CREATE TABLE [dbo].[StudentInCourse](
@@ -87,18 +92,19 @@ CREATE TABLE [dbo].[StudentInCourse](
 )
 
 CREATE TABLE [dbo].[Team](
+	[TeamId] [int] IDENTITY (1, 1),
 	[TeamName] [nvarchar](255) NOT NULL UNIQUE,
 	[LeaderId] [int] NOT NULL,
 	[CreateDate] [date],
 	[NumberOfMembers] [int] NOT NULL,
 	[isDeleted] [bit],
 
-	CONSTRAINT PK_Team PRIMARY KEY ([TeamName])
+	CONSTRAINT PK_Team PRIMARY KEY ([TeamId])
 )
 
 CREATE TABLE [dbo].[Teammate](
 	[TeammateId] [nvarchar](255) NOT NULL REFERENCES [StudentInCourse](SICId) on delete cascade on update cascade,
-	[TeamName] [nvarchar](255) NOT NULL REFERENCES [Team](TeamName) on delete cascade on update cascade,
+	[TeamId] [int] NOT NULL REFERENCES [Team](TeamId) on delete cascade on update cascade,
 	[TeammateRole] [int],
 	[TeammateJoinDate] [date],
 	[isDeleted] [bit], 
@@ -122,7 +128,7 @@ CREATE TABLE [dbo].[Feedback](
 
 CREATE TABLE [dbo].[Task](
 	[TaskId] [int] IDENTITY (1, 1),
-	[TeamName] [nvarchar](255) NOT NULL REFERENCES [Team](TeamName) on delete cascade on update cascade,
+	[TeamId] [int] NOT NULL REFERENCES [Team](TeamId) on delete cascade on update cascade,
 	[TaskName] [nvarchar](255),
 	[TaskDescription] [nvarchar](255),
 	[TaskStartDate] [datetime],

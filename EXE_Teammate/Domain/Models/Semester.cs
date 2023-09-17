@@ -10,6 +10,7 @@ namespace Domain.Models
             Courses = new HashSet<Course>();
         }
 
+        public int SemesterId { get; set; }
         public string SemesterCode { get; set; } = null!;
         public DateTime? SemesterStartDate { get; set; }
         public DateTime? SemesterEndDate { get; set; }

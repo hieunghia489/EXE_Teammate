@@ -11,7 +11,7 @@ namespace Domain.Models
         }
 
         public int TaskId { get; set; }
-        public string TeamName { get; set; } = null!;
+        public int TeamId { get; set; }
         public string? TaskName { get; set; }
         public string? TaskDescription { get; set; }
         public DateTime? TaskStartDate { get; set; }
@@ -20,7 +20,7 @@ namespace Domain.Models
         public int? Status { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual Team TeamNameNavigation { get; set; } = null!;
+        public virtual Team Team { get; set; } = null!;
         public virtual ICollection<TaskParticipant> TaskParticipants { get; set; }
     }
 }

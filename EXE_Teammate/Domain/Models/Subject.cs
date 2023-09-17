@@ -10,7 +10,8 @@ namespace Domain.Models
             Courses = new HashSet<Course>();
         }
 
-        public string SubjectCode { get; set; } = null!;
+        public int SubjectId { get; set; }
+        public string? SubjectCode { get; set; }
         public string? SubjectDescription { get; set; }
         public bool? IsDeleted { get; set; }
 

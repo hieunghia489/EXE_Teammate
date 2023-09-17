@@ -10,6 +10,7 @@ namespace Domain.Models
             Students = new HashSet<Student>();
         }
 
+        public int MajorId { get; set; }
         public string MajorCode { get; set; } = null!;
         public string MajorName { get; set; } = null!;
         public string? MajorDescription { get; set; }

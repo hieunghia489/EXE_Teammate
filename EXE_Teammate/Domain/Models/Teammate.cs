@@ -12,12 +12,12 @@ namespace Domain.Models
         }
 
         public string TeammateId { get; set; } = null!;
-        public string TeamName { get; set; } = null!;
+        public int TeamId { get; set; }
         public int? TeammateRole { get; set; }
         public DateTime? TeammateJoinDate { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual Team TeamNameNavigation { get; set; } = null!;
+        public virtual Team Team { get; set; } = null!;
         public virtual StudentInCourse TeammateNavigation { get; set; } = null!;
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<TaskParticipant> TaskParticipants { get; set; }

@@ -10,6 +10,7 @@ namespace Domain.Models
             Students = new HashSet<Student>();
         }
 
+        public int GradeId { get; set; }
         public string GradeCode { get; set; } = null!;
         public string? GradeDescription { get; set; }
         public DateTime? GradeStartDate { get; set; }

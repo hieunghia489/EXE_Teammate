@@ -11,6 +11,7 @@ namespace Domain.Models
             Teammates = new HashSet<Teammate>();
         }
 
+        public int TeamId { get; set; }
         public string TeamName { get; set; } = null!;
         public int LeaderId { get; set; }
         public DateTime? CreateDate { get; set; }
